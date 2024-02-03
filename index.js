@@ -9,7 +9,7 @@ app.get('/dalle', async (req, res) => {
 
   const options = {
     method: 'POST',
-    url: 'https://text-to-image-dalle.p.rapidapi.com/generate/photon',
+    url: 'https://text-to-image-dalle.p.rapidapi.com/generate_image',
     headers: {
       'content-type': 'application/json',
       'X-RapidAPI-Key': '3fa82b3121msh60993f970f09819p15c22cjsncc0b065b5f1c',
