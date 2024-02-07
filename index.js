@@ -1,33 +1,32 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
-app.get('/imagine', async (req, res) => {
-  const { prompt } = req.query;
+app.use(bodyParser.json());
 
-  const options = {
-    method: 'POST',
-    url: 'https://fast-stable-diffusion-xl.p.rapidapi.com/generate',
-    headers: {
-      'content-type': 'application/json',
-      'X-RapidAPI-Key': '3fa82b3121msh60993f970f09819p15c22cjsncc0b065b5f1c',
-      'X-RapidAPI-Host': 'fast-stable-diffusion-xl.p.rapidapi.com',
-    },
-    data: {
-      prompt: prompt,
-      negativePrompt: 'example negativePrompt',
-    },
-  };
-
+app.get('/dalle', async (req, res) => {
   try {
+    const prompt = req.query.prompt;
+    const options = {
+      method: 'POST',
+      url: 'https://text-to-image-dalle.p.rapidapi.com/generate/photon',
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': '0820ec24afmsh10d1bef860c3651p10e3f6jsn715a93754ace',
+        'X-RapidAPI-Host': 'text-to-image-dalle.p.rapidapi.com'
+      },
+      data: { text_query: prompt }
+    };
+
     const response = await axios.request(options);
-    const { ImageUrl } = response.data;
-    res.json({ imageUrl: ImageUrl });
+    const imageUrl = response.data.image_url;
+    res.json({ imageUrl });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
